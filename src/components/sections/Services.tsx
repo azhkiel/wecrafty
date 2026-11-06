@@ -1,5 +1,6 @@
 import React from 'react';
 import { Building2, Rocket, Briefcase, Code, ShieldCheck, Layout, CheckCircle2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { getServicesData, ServiceItem } from '../../data/services.ts';
 import { useLanguage } from '../../context/LanguageContext.tsx';
 import { translations } from '../../data/translations.ts';
@@ -32,10 +33,22 @@ export const Services: React.FC = () => {
       aria-labelledby="services-heading"
       className="scroll-section bg-[#F6F8FC] py-20 md:py-24 border-b border-slate-200/80"
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] as const }}
+        className="max-w-6xl mx-auto px-4 sm:px-6"
+      >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Left Column: Sticky Context Header (4 cols) */}
-          <div className="lg:col-span-4 lg:sticky lg:top-24">
+          {/* Left Column: Sticky Context Header (4 cols) with motion */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-4 lg:sticky lg:top-24"
+          >
             <p className="text-xs font-semibold tracking-wide text-[#0F6FD9] uppercase mb-2">
               {t.services.kicker}
             </p>
@@ -62,14 +75,19 @@ export const Services: React.FC = () => {
                 </a>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Uneven Grid (8 cols) */}
           <div className="lg:col-span-8 flex flex-col gap-6">
-            {/* Primary Featured Service Card (Company Profile Website) */}
+            {/* Primary Featured Service Card with Motion */}
             {featuredService && (
-              <div
+              <motion.div
                 key={featuredService.id}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                whileHover={{ y: -3, boxShadow: '0 10px 25px -5px rgba(23, 22, 94, 0.08)' }}
+                transition={{ duration: 0.25 }}
                 className="bg-white border-2 border-[#0F6FD9]/30 rounded-lg p-6 sm:p-8 shadow-xs hover:border-[#0F6FD9] transition-colors"
               >
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-slate-100">
@@ -107,14 +125,19 @@ export const Services: React.FC = () => {
                     </ul>
                   </div>
                 )}
-              </div>
+              </motion.div>
             )}
 
-            {/* Secondary Services Grid (5 cards) */}
+            {/* Secondary Services Grid with staggered cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {secondaryServices.map((service, index) => (
-                <div
+                <motion.div
                   key={service.id}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-30px' }}
+                  whileHover={{ y: -3, boxShadow: '0 8px 20px -4px rgba(23, 22, 94, 0.06)' }}
+                  transition={{ duration: 0.2, delay: index * 0.05 }}
                   className={`bg-white border border-slate-200 rounded-lg p-5 sm:p-6 shadow-xs hover:border-[#1685F7] transition-colors flex flex-col justify-between ${
                     index === 0 ? 'sm:col-span-2' : ''
                   }`}
@@ -143,12 +166,12 @@ export const Services: React.FC = () => {
                       ))}
                     </ul>
                   )}
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };

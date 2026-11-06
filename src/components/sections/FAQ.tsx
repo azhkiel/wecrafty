@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getFaqData } from '../../data/faq.ts';
 import { useLanguage } from '../../context/LanguageContext.tsx';
 import { translations } from '../../data/translations.ts';
@@ -22,8 +23,14 @@ export const FAQ: React.FC = () => {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Left Column (4 cols): Heading & Prompt */}
-          <div className="lg:col-span-4 lg:sticky lg:top-24">
+          {/* Left Column (4 cols): Heading & Prompt with Motion */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-4 lg:sticky lg:top-24"
+          >
             <p className="text-xs font-semibold tracking-wide text-[#0F6FD9] uppercase mb-2">
               {t.faq.kicker}
             </p>
@@ -45,17 +52,24 @@ export const FAQ: React.FC = () => {
             >
               {t.faq.reachOut}
             </a>
-          </div>
+          </motion.div>
 
-          {/* Right Column (8 cols): Accessible Accordion */}
+          {/* Right Column (8 cols): Accessible Motion Accordion */}
           <div className="lg:col-span-8 divide-y divide-slate-200 border-t border-b border-slate-200">
-            {faqList.map((item) => {
+            {faqList.map((item, index) => {
               const isOpen = openId === item.id;
               const triggerId = `faq-trigger-${item.id}`;
               const panelId = `faq-panel-${item.id}`;
 
               return (
-                <div key={item.id} className="py-4">
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-20px' }}
+                  transition={{ duration: 0.25, delay: index * 0.04 }}
+                  className="py-4"
+                >
                   <h3>
                     <button
                       id={triggerId}
@@ -66,31 +80,37 @@ export const FAQ: React.FC = () => {
                       className="w-full py-2 flex items-center justify-between text-left text-base sm:text-lg font-bold text-[#17165E] hover:text-[#0F6FD9] transition-colors cursor-pointer group focus-visible:outline-2 focus-visible:outline-[#0F6FD9] rounded-xs"
                     >
                       <span className="pr-4">{item.question}</span>
-                      <ChevronDown
-                        size={18}
-                        className={`text-slate-400 group-hover:text-[#0F6FD9] shrink-0 transition-transform duration-200 ${
-                          isOpen ? 'rotate-180 text-[#0F6FD9]' : ''
-                        }`}
-                        aria-hidden="true"
-                      />
+                      <motion.div
+                        animate={{ rotate: isOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                        className="text-slate-400 group-hover:text-[#0F6FD9] shrink-0"
+                      >
+                        <ChevronDown size={18} aria-hidden="true" />
+                      </motion.div>
                     </button>
                   </h3>
 
-                  <div
-                    id={panelId}
-                    role="region"
-                    aria-labelledby={triggerId}
-                    className={`grid transition-[grid-template-rows,opacity] duration-200 ease-out ${
-                      isOpen ? 'grid-rows-[1fr] opacity-100 pt-2 pb-3' : 'grid-rows-[0fr] opacity-0'
-                    }`}
-                  >
-                    <div className="overflow-hidden">
-                      <p className="text-sm sm:text-base text-[#17165E]/80 leading-relaxed">
-                        {item.answer}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        id={panelId}
+                        role="region"
+                        aria-labelledby={triggerId}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pt-2 pb-3">
+                          <p className="text-sm sm:text-base text-[#17165E]/80 leading-relaxed">
+                            {item.answer}
+                          </p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
               );
             })}
           </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ExternalLink, Globe } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { ProjectItem } from '../../data/projects.ts';
 import { useLanguage } from '../../context/LanguageContext.tsx';
 import { translations } from '../../data/translations.ts';
@@ -15,7 +16,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSelect }) =
   const isFeatured = project.isFeatured;
 
   return (
-    <article
+    <motion.article
+      whileHover={{ y: -3, boxShadow: '0 12px 28px -6px rgba(0, 0, 0, 0.35)' }}
+      transition={{ duration: 0.2 }}
       className={`group bg-[#1a1969] border border-white/15 rounded-lg overflow-hidden flex flex-col justify-between transition-colors hover:border-[#1685F7] ${
         isFeatured ? 'lg:col-span-12' : 'lg:col-span-6'
       }`}
@@ -142,6 +145,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSelect }) =
           </div>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 };

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext.tsx';
 import { translations } from '../../data/translations.ts';
 
 export const Process: React.FC = () => {
   const { lang } = useLanguage();
   const t = translations[lang];
+  const [activeStep, setActiveStep] = useState<string>("01");
 
   return (
     <section
@@ -14,7 +16,13 @@ export const Process: React.FC = () => {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
-        <div className="max-w-2xl mb-14">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-2xl mb-14"
+        >
           <p className="text-xs font-semibold tracking-wide text-[#0F6FD9] uppercase mb-2">
             {t.process.kicker}
           </p>
@@ -27,7 +35,7 @@ export const Process: React.FC = () => {
           <p className="mt-4 text-base text-[#17165E]/80 leading-relaxed">
             {t.process.description}
           </p>
-        </div>
+        </motion.div>
 
         {/* Timeline: Horizontal on Desktop, Vertical on Mobile */}
         <div className="relative">
@@ -38,26 +46,58 @@ export const Process: React.FC = () => {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 relative z-10">
-            {t.process.steps.map((step) => (
-              <div
-                key={step.number}
-                tabIndex={0}
-                className="group flex flex-col items-start pt-2 border-l-2 lg:border-l-0 lg:border-t-2 border-[#1685F7]/30 lg:border-slate-200 hover:border-[#0F6FD9] lg:hover:border-[#0F6FD9] transition-all duration-200 pl-4 lg:pl-0 focus-visible:outline-2 focus-visible:outline-[#0F6FD9] rounded-xs"
-              >
-                {/* Step Number in Display Font */}
-                <span className="font-display font-bold text-3xl sm:text-4xl text-[#0F6FD9] group-hover:text-[#1685F7] transition-colors duration-150 tabular-nums mb-3 block">
-                  {step.number}
-                </span>
+            {t.process.steps.map((step, index) => {
+              const isActive = activeStep === step.number;
+              return (
+                <motion.div
+                  key={step.number}
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-30px' }}
+                  transition={{ duration: 0.3, delay: index * 0.07 }}
+                  onMouseEnter={() => setActiveStep(step.number)}
+                  tabIndex={0}
+                  onFocus={() => setActiveStep(step.number)}
+                  className={`group relative flex flex-col items-start pt-3 border-l-2 lg:border-l-0 lg:border-t-2 pl-4 lg:pl-0 transition-all duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#0F6FD9] rounded-xs ${
+                    isActive
+                      ? 'border-[#0F6FD9]'
+                      : 'border-[#1685F7]/30 lg:border-slate-200 hover:border-[#0F6FD9]'
+                  }`}
+                >
+                  {/* Motion Active Indicator on Desktop */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="process-indicator"
+                      className="hidden lg:block absolute -top-[2px] left-0 right-0 h-[2px] bg-[#0F6FD9]"
+                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    />
+                  )}
 
-                <h3 className="text-lg sm:text-xl font-bold text-[#17165E] group-hover:text-[#0F6FD9] transition-colors duration-150 mb-2">
-                  {step.title}
-                </h3>
+                  {/* Step Number in Display Font with Motion */}
+                  <motion.span
+                    animate={{ scale: isActive ? 1.05 : 1 }}
+                    transition={{ duration: 0.15 }}
+                    className={`font-display font-bold text-3xl sm:text-4xl tabular-nums mb-3 block transition-colors duration-150 ${
+                      isActive ? 'text-[#0F6FD9]' : 'text-[#0F6FD9]/80 group-hover:text-[#0F6FD9]'
+                    }`}
+                  >
+                    {step.number}
+                  </motion.span>
 
-                <p className="text-sm text-[#17165E]/80 leading-relaxed">
-                  {step.description}
-                </p>
-              </div>
-            ))}
+                  <h3
+                    className={`text-lg sm:text-xl font-bold mb-2 transition-colors duration-150 ${
+                      isActive ? 'text-[#0F6FD9]' : 'text-[#17165E] group-hover:text-[#0F6FD9]'
+                    }`}
+                  >
+                    {step.title}
+                  </h3>
+
+                  <p className="text-sm text-[#17165E]/80 leading-relaxed">
+                    {step.description}
+                  </p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </div>

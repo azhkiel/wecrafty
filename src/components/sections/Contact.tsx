@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowUpRight, MessageSquare, Mail, Instagram, Send } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { siteConfig } from '../../config/site.ts';
 import { useLanguage } from '../../context/LanguageContext.tsx';
 import { translations } from '../../data/translations.ts';
@@ -49,7 +50,13 @@ export const Contact: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column (7 cols): Heading & Prompt Action */}
-          <div className="lg:col-span-7 flex flex-col items-start">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-7 flex flex-col items-start"
+          >
             <span className="text-xs font-semibold tracking-wide text-[#1685F7] uppercase mb-2">
               {t.contact.kicker}
             </span>
@@ -67,7 +74,10 @@ export const Contact: React.FC = () => {
 
             {/* Primary Action Button */}
             <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
-              <a
+              <motion.a
+                whileHover={{ y: -2, boxShadow: '0 8px 20px -4px rgba(15, 111, 217, 0.4)' }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.15 }}
                 href={getDynamicWhatsAppHref()}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -75,7 +85,7 @@ export const Contact: React.FC = () => {
               >
                 <span>{t.contact.primaryButton}</span>
                 <ArrowUpRight size={16} aria-hidden="true" />
-              </a>
+              </motion.a>
             </div>
 
             {/* Secondary Direct Channels as Text Links */}
@@ -118,10 +128,16 @@ export const Contact: React.FC = () => {
                 </a>
               )}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Right Column (5 cols): Lightweight Inquiry Pre-filler Box */}
-          <div className="lg:col-span-5 bg-[#1a1969] border border-white/15 rounded-lg p-6 sm:p-7 shadow-xs">
+          {/* Right Column (5 cols): Lightweight Inquiry Pre-filler Box with Motion */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.35, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 bg-[#1a1969] border border-white/15 rounded-lg p-6 sm:p-7 shadow-xs"
+          >
             <h3 className="text-sm font-bold text-white mb-1 flex items-center gap-2">
               <Send size={15} className="text-[#1685F7]" aria-hidden="true" />
               <span>{t.contact.quickBriefTitle}</span>
@@ -170,23 +186,27 @@ export const Contact: React.FC = () => {
               </div>
 
               <div className="pt-2 flex flex-col sm:flex-row gap-2">
-                <button
+                <motion.button
+                  whileHover={{ y: -1 }}
+                  whileTap={{ scale: 0.98 }}
                   type="submit"
                   className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#0F6FD9] hover:bg-[#0d61be] rounded-md transition-colors cursor-pointer"
                 >
                   <span>{t.contact.openWhatsApp}</span>
                   <ArrowUpRight size={13} aria-hidden="true" />
-                </button>
+                </motion.button>
 
-                <a
+                <motion.a
+                  whileHover={{ y: -1 }}
+                  whileTap={{ scale: 0.98 }}
                   href={getDynamicEmailHref()}
                   className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-md transition-colors cursor-pointer text-center"
                 >
                   <span>{t.contact.openEmail}</span>
-                </a>
+                </motion.a>
               </div>
             </form>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
