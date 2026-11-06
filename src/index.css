@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #17165E;
+  --color-blue: #1685F7;
+  --color-blue-strong: #0F6FD9;
+  --color-purple: #8739E8;
+  --color-gray-50: #F6F8FC;
+  --color-green: #36C99A;
+  --color-orange: #FFB13B;
+
+  --font-display: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-body);
+    color: var(--color-navy);
+    background-color: #ffffff;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+  }
+
+  /* Accessible focus indicators */
+  :focus-visible {
+    outline: 2px solid var(--color-blue-strong);
+    outline-offset: 2px;
+  }
+}
+
+/* Animation keyframes adhering strictly to motion latency budget (<=300ms, transform & opacity only) */
+@keyframes heroEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Single subtle ambient micro-float for one decorative pixel square */
+@keyframes singleAmbientPixel {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.animate-hero-1 {
+  animation: heroEntrance 260ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-hero-2 {
+  opacity: 0;
+  animation: heroEntrance 260ms cubic-bezier(0.16, 1, 0.3, 1) 70ms forwards;
+}
+
+.animate-hero-3 {
+  opacity: 0;
+  animation: heroEntrance 260ms cubic-bezier(0.16, 1, 0.3, 1) 140ms forwards;
+}
+
+.animate-hero-preview {
+  opacity: 0;
+  animation: heroEntrance 300ms cubic-bezier(0.16, 1, 0.3, 1) 180ms forwards;
+}
+
+.animate-modal-in {
+  animation: modalFadeIn 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-ambient-pixel {
+  animation: singleAmbientPixel 4.5s ease-in-out infinite;
+}
+
+/* Reduced motion support (mandatory override) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Section scroll margins to account for fixed navbar height */
+.scroll-section {
+  scroll-margin-top: 4.5rem;
+}

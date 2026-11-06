@@ -1,0 +1,6 @@
+{
+  "name": "Wecrafty — Your Website, Our Craft",
+  "description": "Wecrafty helps businesses build professional digital experiences through modern, responsive, and customized website development.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

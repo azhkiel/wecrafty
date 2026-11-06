@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://wecrafty.example.com/sitemap.xml
